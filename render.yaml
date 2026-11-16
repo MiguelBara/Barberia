@@ -1,0 +1,28 @@
+# Configuración de despliegue en Render (https://render.com) — plan gratuito.
+# En Render: New > Blueprint > elegir este repositorio. Render lee este archivo
+# y solo pide los valores marcados con "sync: false".
+services:
+  - type: web
+    name: angel-urban-style
+    runtime: node
+    plan: free
+    # --include=dev: el build necesita TypeScript y Tailwind, que son devDependencies
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm run start
+    healthCheckPath: /
+    envVars:
+      # Hora de Colombia: sin esto el servidor usa UTC y las "horas que ya pasaron"
+      # se calcularían con 5 horas de diferencia.
+      - key: TZ
+        value: America/Bogota
+      # Contraseña del Portal del Barbero (la escribes tú en Render)
+      - key: ADMIN_PASSWORD
+        sync: false
+      # Clave para firmar la sesión: Render genera una aleatoria
+      - key: ADMIN_SESSION_SECRET
+        generateValue: true
+      # Base de datos Turso (https://turso.tech): URL "libsql://..." y su token
+      - key: TURSO_DATABASE_URL
+        sync: false
+      - key: TURSO_AUTH_TOKEN
+        sync: false

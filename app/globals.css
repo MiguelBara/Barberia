@@ -1,26 +1,96 @@
 @import "tailwindcss";
 
+/* La marca es siempre oscura (barbería premium), sin importar el tema del sistema */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0a0a0b;
+  --foreground: #e9e7e4;
+  color-scheme: dark; /* Barras de desplazamiento y controles nativos oscuros */
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-jakarta);
+  --font-serif: var(--font-jakarta); /* Los titulares usan la misma sans, pero en peso 800 */
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/*
+  Paleta de marca. Se redefinen "amber" (dorado) y "stone" (carbón) para que
+  todos los componentes existentes adopten el nuevo estilo sin cambiar sus clases.
+*/
+@theme {
+  --color-amber-50: #fbf6ee;
+  --color-amber-100: #f5e8d3;
+  --color-amber-200: #ead0a6;
+  --color-amber-300: #e2b97a;
+  --color-amber-400: #dca762; /* Hover / textos dorados */
+  --color-amber-500: #d69c4a; /* Dorado principal */
+  --color-amber-600: #c08640;
+  --color-amber-700: #9c6a33;
+  --color-amber-800: #7a522a;
+  --color-amber-900: #5c3e21;
+  --color-amber-950: #33220f;
+
+  --color-stone-50: #f7f6f4;
+  --color-stone-100: #eeece9;
+  --color-stone-200: #dedbd6;
+  --color-stone-300: #c3bfb9;
+  --color-stone-400: #9b9792;
+  --color-stone-500: #75726e;
+  --color-stone-600: #55534f;
+  --color-stone-700: #3a3936;
+  --color-stone-800: #262624;
+  --color-stone-900: #161617;
+  --color-stone-950: #0a0a0b;
+
+  /* Esquinas más rectas, al estilo de barbería clásica */
+  --radius-lg: 0.25rem;
+  --radius-xl: 0.375rem;
+  --radius-2xl: 0.5rem;
+  --radius-3xl: 0.625rem;
+}
+
+/* Animaciones del flujo de reserva: se usan como `animate-entrada` y `animate-aparecer` */
+@theme {
+  --animate-entrada: entrada 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-aparecer: aparecer 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+
+  /* Cada paso entra deslizándose suavemente hacia arriba */
+  @keyframes entrada {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* El check del ticket aparece con un pequeño rebote */
+  @keyframes aparecer {
+    from {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
+/* Titulares: sans extra-gruesa (las clases font-* explícitas siguen ganando) */
+@layer components {
+  .font-serif {
+    font-weight: 800;
+    letter-spacing: -0.01em;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-jakarta), Arial, Helvetica, sans-serif;
 }
